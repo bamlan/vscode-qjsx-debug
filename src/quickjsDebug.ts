@@ -15,7 +15,8 @@ interface CommonArguments extends SourcemapArguments {
 	program: string;
 	args?: string[];
 	cwd?: string;
-	runtimeExecutable: string;
+	dbgExecutable: string;
+	dbgArgs?: string[];
 	mode: string;
 	address: string;
 	port: number;
@@ -259,12 +260,14 @@ export class QuickJSDebugSession extends SourcemapSession {
 
 		let qjsArgs = (args.args || []).slice();
 		qjsArgs.unshift(args.program);
+		if(args.dbgArgs)
+			qjsArgs.unshift(...args.dbgArgs);
 
 		if (this._supportsRunInTerminalRequest && (this._console === 'externalTerminal' || this._console === 'integratedTerminal')) {
 
 			const termArgs: DebugProtocol.RunInTerminalRequestArguments = {
 				kind: this._console === 'integratedTerminal' ? 'integrated' : 'external',
-				title: "QuickJS Debug Console",
+				title: "QuickJS X Debug Console",
 				cwd,
 				args: qjsArgs,
 				env,
@@ -284,7 +287,7 @@ export class QuickJSDebugSession extends SourcemapSession {
 				env,
 			};
 
-			const nodeProcess = CP.spawn(args.runtimeExecutable, qjsArgs, options);
+			const nodeProcess = CP.spawn(args.dbgExecutable, qjsArgs, options);
 			nodeProcess.on('error', (error) => {
 				// tslint:disable-next-line:no-bitwise
 				this.sendErrorResponse(response, 2017, `Cannot launch debug target (${error.message}).`);
@@ -313,6 +316,7 @@ export class QuickJSDebugSession extends SourcemapSession {
 
 
 	private beforeConnection(env: any) {
+		this.loadSourceMaps();
 		// make sure to 'Stop' the buffered logging if 'trace' is not set
 		logger.setup(this._commonArgs.trace ? Logger.LogLevel.Verbose : Logger.LogLevel.Stop, false);
 
@@ -334,7 +338,7 @@ export class QuickJSDebugSession extends SourcemapSession {
 			});
 			this._server.listen(this._commonArgs.port || 0);
 			let port = (<AddressInfo>this._server.address()).port;
-			this.log(`QuickJS Debug Port: ${port}`);
+			this.log(`QuickJS X Debug Port: ${port}`);
 
 			env['QUICKJS_DEBUG_ADDRESS'] = `localhost:${port}`;
 		}

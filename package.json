@@ -75,7 +75,7 @@
 					"launch": {
 						"required": [
 							"program",
-							"runtimeExecutable"
+							"dbgExecutable"
 						],
 						"properties": {
 							"program": {
@@ -103,9 +103,17 @@
 								"type": "string",
 								"default": "${workspaceFolder}"
 							},
-							"runtimeExecutable": {
+							"dbgExecutable": {
 								"type": "string",
-								"description": "Path to qjs executable"
+								"description": "Path to qjsdbg executable"
+							},
+							"dbgArgs": {
+								"type": "array",
+								"description": "Args appended after ${dbgExecutable} and before ${program}",
+								"items": {
+									"type": "string"
+								},
+								"default": []
 							},
 							"mode": {
 								"type": "string",
@@ -201,7 +209,7 @@
 						"type": "qjsx",
 						"name": "Launch QuickJS X",
 						"request": "launch",
-						"runtimeExecutable": "${env:QUICKJS_DEBUG_HOME}/qjsdbg",
+						"dbgExecutable": "${env:QUICKJS_DEBUG_HOME}/qjsdbg",
 						"cwd": "${workspaceFolder}/",
 						"program": "./main.js",
 						"localRoot": "${workspaceFolder}/"
@@ -215,7 +223,7 @@
 							"name": "Launch QuickJS X",
 							"type": "qjsx",
 							"request": "launch",
-							"runtimeExecutable": "^\"\\${env:QUICKJS_DEBUG_HOME}/qjsdbg\"",
+							"dbgExecutable": "^\"\\${env:QUICKJS_DEBUG_HOME}/qjsdbg\"",
 							"cwd": "^\"\\${workspaceFolder}/\"",
 							"program": "./main.js",
 							"localRoot": "^\"\\${workspaceFolder}/\""
@@ -223,7 +231,7 @@
 					},
 					{
 						"label": "QuickJS X Debug: Attach",
-						"description": "A new configuration for launching and waiting fpr QuickJS X to attach.",
+						"description": "A new configuration for launching and waiting for QuickJS X to attach.",
 						"body": {
 							"name": "Attach QuickJS X",
 							"type": "qjsx",

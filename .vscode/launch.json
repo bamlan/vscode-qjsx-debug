@@ -29,14 +29,14 @@
 		},
 		{
 			"name": "Launch QuickJS",
-			"type": "quickjs",
+			"type": "qjsx",
 			"request": "launch",
 			"program": "${workspaceFolder}/src/tests/data/test.js",
 			"runtimeExecutable": "/Volumes/Dev/quickjs/qjs-debug"
 		},
 		{
 			"name": "Attach QuickJS (connect)",
-			"type": "quickjs",
+			"type": "qjsx",
 			"request": "launch",
 			"program": "${workspaceFolder}/src/tests/data/test.js",
 			"runtimeExecutable": "/Volumes/Dev/quickjs/qjs-debug",
@@ -47,7 +47,7 @@
 		},
 		{
 			"name": "Attach QuickJS",
-			"type": "quickjs",
+			"type": "qjsx",
 			"request": "launch",
 			"attach": true,
 			"port": 5555,

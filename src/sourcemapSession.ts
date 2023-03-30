@@ -1,5 +1,5 @@
 import { BasicSourceMapConsumer, MappedPosition, SourceMapConsumer } from 'source-map';
-import { LoggingDebugSession } from 'vscode-debugadapter';
+import { LoggingDebugSession } from '@vscode/debugadapter';
 import { SourcemapArguments } from "./sourcemapArguments";
 const path = require('path');
 const fs = require('fs');
@@ -11,8 +11,8 @@ export abstract class SourcemapSession extends LoggingDebugSession {
 	// keep track of the sourcemaps and the location of the file.map used to load it
 	private _sourceMaps = new Map<BasicSourceMapConsumer, string>();
 
-	abstract async logTrace(message: string);
-	abstract async getArguments(): Promise<SourcemapArguments>;
+	abstract logTrace(message: string);
+	abstract getArguments(): Promise<SourcemapArguments>;
 
 	async loadSourceMaps() {
 		const commonArgs = await this.getArguments();
@@ -111,7 +111,7 @@ export abstract class SourcemapSession extends LoggingDebugSession {
 			this.logTrace(`translateFileLocationToRemote: ${JSON.stringify(sourceLocation)} to: ${JSON.stringify(actualSourceLocation)}`);
 			// convert the local absolute path into a sourcemap relative path.
 			actualSourceLocation.source = path.relative(path.dirname(sourcemap), sourceLocation.source);
-			delete actualSourceLocation.column;
+			//delete actualSourceLocation.column;
 			// let unmappedPosition: NullablePosition = sm.generatedPositionFor(actualSourceLocation);
 			let unmappedPositions = sm.allGeneratedPositionsFor(actualSourceLocation);
 			if (!unmappedPositions || !unmappedPositions.length)

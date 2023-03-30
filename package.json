@@ -1,9 +1,9 @@
 {
-	"name": "quickjs-debug",
-	"displayName": "QuickJS Debugger",
-	"version": "0.0.15",
-	"publisher": "koush",
-	"description": "Debug the QuickJS runtime.",
+	"name": "qjsx-debug",
+	"displayName": "QuickJS X Debugger",
+	"version": "0.0.16",
+	"publisher": "bamlan",
+	"description": "Debug the QuickJS X runtime.",
 	"author": {
 		"name": "Koushik Dutta",
 		"email": "koushd@gmail.com"
@@ -13,8 +13,8 @@
 		"multi-root ready"
 	],
 	"engines": {
-		"vscode": "^1.33.0",
-		"node": "^10.15.1"
+		"vscode": "^1.66.0",
+		"node": "^18.15.0"
 	},
 	"icon": "images/quickjs-debug-icon.png",
 	"categories": [
@@ -33,25 +33,27 @@
 		"compile": "tsc -p ./src",
 		"tslint": "tslint ./src/**/*.ts",
 		"watch": "tsc -w -p ./src",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"package": "vsce package",
+		"package": "tsc -p ./src && vsce package",
 		"publish": "vsce publish"
 	},
 	"dependencies": {
-		"await-notify": "1.0.1",
-		"source-map": "^0.7.3",
+		"await-notify": "^1.0.1",
+		"source-map": "^0.7.4",
 		"stream-parser": "^0.3.1",
-		"vscode-debugadapter": "^1.41.1"
+		"@vscode/debugadapter": "^1.59.0"
 	},
 	"devDependencies": {
-		"@types/node": "10.12.12",
-		"@types/mocha": "5.2.7",
-		"typescript": "3.5.3",
-		"mocha": "6.2.0",
-		"vscode": "1.1.36",
-		"vscode-debugadapter-testsupport": "1.37.0",
-		"tslint": "5.18.0",
-		"vsce": "1.66.0"
+		"@types/node": "^18.15.11",
+		"@types/vscode": "^1.66.0",
+		"@types/mocha": "^10.0.1",
+		"@types/glob": "^8.1.0",
+		"@vscode/debugadapter-testsupport": "^1.59.0",
+		"@vscode/vsce": "^2.18.0",
+		"typescript": "^5.0.2",
+		"tslint": "^5.20.1",
+		"mocha": "^10.2.0",
+		"glob": "^9.3.2",
+		"url": "^0.11.0"
 	},
 	"main": "./out/extension",
 	"activationEvents": [
@@ -65,8 +67,8 @@
 		],
 		"debuggers": [
 			{
-				"type": "quickjs",
-				"label": "QuickJS Debug",
+				"type": "qjsx",
+				"label": "QuickJS X Debug",
 				"program": "./out/debugAdapter.js",
 				"runtime": "node",
 				"configurationAttributes": {
@@ -107,7 +109,7 @@
 							},
 							"mode": {
 								"type": "string",
-								"description": "The debugger connection mode. Use 'listen' to have VS Code wait for QuickJS to connect. Use 'connect' to have VSCode attach to a QuickJS runtime that is listening for a debugger.",
+								"description": "The debugger connection mode. Use 'listen' to have VS Code wait for QuickJS X to connect. Use 'connect' to have VSCode attach to a QuickJS X runtime that is listening for a debugger.",
 								"enum": [
 									"connect",
 									"listen"
@@ -152,7 +154,7 @@
 						"properties": {
 							"mode": {
 								"type": "string",
-								"description": "The debugger connection mode. Use 'listen' to have VS Code wait for QuickJS to connect. Use 'connect' to have VSCode attach to a QuickJS runtime that is listening for a debugger.",
+								"description": "The debugger connection mode. Use 'listen' to have VS Code wait for QuickJS X to connect. Use 'connect' to have VSCode attach to a QuickJS X runtime that is listening for a debugger.",
 								"enum": [
 									"connect",
 									"listen"
@@ -196,32 +198,36 @@
 				},
 				"initialConfigurations": [
 					{
-						"type": "quickjs",
+						"type": "qjsx",
+						"name": "Launch QuickJS X",
 						"request": "launch",
-						"name": "Launch QuickJS",
-						"runtimeExecutable": "/path/to/qjs",
-						"program": "^\"${workspaceFolder}/main.js\""
+						"runtimeExecutable": "${env:QUICKJS_DEBUG_HOME}/qjsdbg",
+						"cwd": "${workspaceFolder}/",
+						"program": "./main.js",
+						"localRoot": "${workspaceFolder}/"
 					}
 				],
 				"configurationSnippets": [
 					{
-						"label": "QuickJS Debug: Launch",
-						"description": "A new configuration for launching and debugging a JavaScript file in QuickJS.",
+						"label": "QuickJS X Debug: Launch",
+						"description": "A new configuration for launching and debugging a JavaScript file in QuickJS X.",
 						"body": {
-							"type": "quickjs",
+							"name": "Launch QuickJS X",
+							"type": "qjsx",
 							"request": "launch",
-							"name": "Launch QuickJS",
-							"runtimeExecutable": "/path/to/qjs",
-							"program": "^\"\\${workspaceFolder}/main.js\""
+							"runtimeExecutable": "^\"\\${env:QUICKJS_DEBUG_HOME}/qjsdbg\"",
+							"cwd": "^\"\\${workspaceFolder}/\"",
+							"program": "./main.js",
+							"localRoot": "^\"\\${workspaceFolder}/\""
 						}
 					},
 					{
-						"label": "QuickJS Debug: Attach",
-						"description": "A new configuration for launching and waiting fpr QuickJS to attach.",
+						"label": "QuickJS X Debug: Attach",
+						"description": "A new configuration for launching and waiting fpr QuickJS X to attach.",
 						"body": {
-							"type": "quickjs",
+							"name": "Attach QuickJS X",
+							"type": "qjsx",
 							"request": "launch",
-							"name": "Attach QuickJS",
 							"localRoot": "^\"\\${workspaceFolder}/\""
 						}
 					}

@@ -2,8 +2,8 @@ import * as CP from 'child_process';
 import { AddressInfo, createConnection, Server, Socket } from 'net';
 import { basename } from 'path';
 import { MappedPosition } from 'source-map';
-import { InitializedEvent, Logger, logger, OutputEvent, Scope, Source, StackFrame, StoppedEvent, TerminatedEvent, Thread, ThreadEvent } from 'vscode-debugadapter';
-import { DebugProtocol } from 'vscode-debugprotocol';
+import { InitializedEvent, Logger, logger, OutputEvent, Scope, Source, StackFrame, StoppedEvent, TerminatedEvent, Thread, ThreadEvent } from '@vscode/debugadapter';
+import { DebugProtocol } from '@vscode/debugprotocol';
 import { SourcemapArguments } from './sourcemapArguments';
 import { SourcemapSession } from "./sourcemapSession";
 const path = require('path');
@@ -87,7 +87,7 @@ export class QuickJSDebugSession extends SourcemapSession {
 	})();
 
 	public constructor() {
-		super("quickjs-debug.txt");
+		super("qjsx-debug.txt");
 
 		this.setDebuggerLinesStartAt1(true);
 		this.setDebuggerColumnsStartAt1(true);
@@ -373,10 +373,10 @@ export class QuickJSDebugSession extends SourcemapSession {
 	}
 
 	private _captureOutput(process: CP.ChildProcess) {
-		process.stdout.on('data', (data: string) => {
+		process.stdout?.on('data', (data: string) => {
 			this.sendEvent(new OutputEvent(data.toString(), 'stdout'));
 		});
-		process.stderr.on('data', (data: string) => {
+		process.stderr?.on('data', (data: string) => {
 			this.sendEvent(new OutputEvent(data.toString(), 'stderr'));
 		});
 	}
@@ -507,7 +507,7 @@ export class QuickJSDebugSession extends SourcemapSession {
 
 	protected async threadsRequest(response: DebugProtocol.ThreadsResponse): Promise<void> {
 		if (this._threads.size === 0) {
-			await new Promise((resolve, reject) => {
+			await new Promise<void>((resolve, reject) => {
 				this.once('quickjs-thread', () => {
 					resolve();
 				});
